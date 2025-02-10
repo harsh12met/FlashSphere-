@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WorldKnoz : The Best Ever News Website On the Internet</title>
+    <link rel="stylesheet" type="text/css" href="styles/main.css">
+</head>
+<body>
+    <h1>* Top Headlines *</h1>
+    <div class="articles-container">
+        <% if (locals.articles) {%>
+        <% articles.forEach(article => { %>
+            <div class="news-article">
+                <img src="<%= article.urlToImage || 'https://techcrunch.com/wp-content/uploads/2014/09/facebook-trending.png' %>" alt="<%= article.title %>">
+                <div class="article-content">
+                    <p>By <%= article.author || 'Unknown Author' %></p>
+                    <h3><%= article.title %></h3>
+                    <p><%= article.description %></p>
+                </div>
+            </div>
+        <% })} %>
+    </div>
+</body>
+</html>
