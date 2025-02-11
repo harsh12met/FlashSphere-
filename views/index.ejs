@@ -3,23 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WorldKnoz : The Best Ever News Website On the Internet</title>
-    <link rel="stylesheet" type="text/css" href="styles/main.css">
+    <title>WorldKnoz : The Best Ever News Website</title>
+    <link rel="stylesheet" type="text/css" href="/styles/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>* Top Headlines *</h1>
-    <div class="articles-container">
-        <% if (locals.articles) {%>
-        <% articles.forEach(article => { %>
-            <div class="news-article">
-                <img src="<%= article.urlToImage || 'https://techcrunch.com/wp-content/uploads/2014/09/facebook-trending.png' %>" alt="<%= article.title %>">
-                <div class="article-content">
-                    <p>By <%= article.author || 'Unknown Author' %></p>
-                    <h3><%= article.title %></h3>
-                    <p><%= article.description %></p>
-                </div>
+    <%- include('partials/header') %>
+
+    <div class="search-container">
+        <form action="/" method="GET" class="search-form">
+            <div class="search-group">
+                <input type="text" name="q" placeholder="Search news..." class="search-input" value="<%= searchQuery %>">
+                <button type="submit" class="search-button">Search</button>
             </div>
-        <% })} %>
+        </form>
     </div>
+
+    <main>
+        <h1>Top Headlines</h1>
+        <div class="articles-container">
+            <% if (locals.articles && articles.length > 0) { %>
+                <% articles.forEach(article => { %>
+                    <div class="news-article">
+                        <img src="<%= article.urlToImage || '/images/placeholder.jpg' %>" 
+                             alt="<%= article.title %>"
+                             onerror="this.src='/images/placeholder.jpg'">
+                        <div class="article-content">
+                            <p class="article-date"><%= new Date(article.publishedAt).toLocaleDateString() %></p>
+                            <p class="article-author">By <%= article.author || 'Unknown Author' %></p>
+                            <h3><%= article.title %></h3>
+                            <p><%= article.description || 'No description available' %></p>
+                            <a href="<%= article.url %>" class="read-more" target="_blank">Read More</a>
+                        </div>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <div class="no-articles">
+                    <p>No articles found. Please try a different search or country.</p>
+                </div>
+            <% } %>
+        </div>
+    </main>
+
+    <%- include('partials/footer') %>
 </body>
 </html>

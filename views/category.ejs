@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WorldKnoz - <%= category.charAt(0).toUpperCase() + category.slice(1) %> News</title>
+    <link rel="stylesheet" type="text/css" href="/styles/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <%- include('partials/header') %>
+    
+    <main>
+        <div class="search-container">
+            <h1><%= category.charAt(0).toUpperCase() + category.slice(1) %> News</h1>
+            <form action="/<%= category %>" method="GET" class="search-form">
+                <div class="search-group">
+                    <select name="country" class="search-input">
+                        <% Object.entries(countries).forEach(([code, country]) => { %>
+                            <option value="<%= code %>" <%= code === currentCountry ? 'selected' : '' %>>
+                                <%= country.name %>
+                            </option>
+                        <% }) %>
+                    </select>
+                    <button type="submit" class="search-button">Update</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="articles-container">
+            <% if (articles && articles.length > 0) { %>
+                <% articles.forEach(article => { %>
+                    <div class="news-article">
+                        <img src="<%= article.urlToImage || '/images/placeholder.jpg' %>" alt="<%= article.title %>">
+                        <div class="article-content">
+                            <p class="article-date"><%= new Date(article.publishedAt).toLocaleDateString() %></p>
+                            <p class="article-author">By <%= article.author || 'Unknown Author' %></p>
+                            <h3><%= article.title %></h3>
+                            <p><%= article.description %></p>
+                            <a href="<%= article.url %>" class="read-more" target="_blank">Read More</a>
+                        </div>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <div class="no-articles">
+                    <p>No articles found for this category. Please try a different country or check back later.</p>
+                </div>
+            <% } %>
+        </div>
+
+        <div class="pagination">
+            <% if (currentPage > 1) { %>
+                <a href="/<%= category %>?page=<%= currentPage - 1 %>" class="page-btn">Previous</a>
+            <% } %>
+            <span class="page-info">Page <%= currentPage %> of <%= totalPages %></span>
+            <% if (currentPage < totalPages) { %>
+                <a href="/<%= category %>?page=<%= currentPage + 1 %>" class="page-btn">Next</a>
+            <% } %>
+        </div>
+    </main>
+
+    <%- include('partials/footer') %>
+</body>
+</html> 

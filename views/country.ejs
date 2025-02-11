@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WorldKnoz - Country News</title>
+    <link rel="stylesheet" type="text/css" href="/styles/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <%- include('partials/header') %>
+    
+    <div class="search-container">
+        <form action="/country" method="GET" class="search-form">
+            <div class="search-group">
+                <select name="code" class="search-input" required>
+                    <option value="">Select Country</option>
+                    <option value="us">United States</option>
+                    <option value="gb">United Kingdom</option>
+                    <option value="in">India</option>
+                    <!-- Add more countries as needed -->
+                </select>
+                <button type="submit" class="search-button">Get News</button>
+            </div>
+        </form>
+    </div>
+
+    <main>
+        <h1><%= countries[countryCode].name %> News</h1>
+        <div class="articles-container">
+            <% articles.forEach(article => { %>
+                <div class="news-article">
+                    <img src="<%= article.urlToImage || '/images/placeholder.jpg' %>" alt="<%= article.title %>">
+                    <div class="article-content">
+                        <p class="article-date"><%= new Date(article.publishedAt).toLocaleDateString() %></p>
+                        <p class="article-author">By <%= article.author || 'Unknown Author' %></p>
+                        <h3><%= article.title %></h3>
+                        <p><%= article.description %></p>
+                        <a href="<%= article.url %>" class="read-more" target="_blank">Read More</a>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+    </main>
+
+    <%- include('partials/footer') %>
+    <script src="/js/countries.js"></script>
+    <script>
+        // Populate states dropdown based on country
+        const states = countries[countryCode].states;
+        const stateSelect = document.getElementById('stateSelect');
+        states.forEach(state => {
+            const option = document.createElement('option');
+            option.value = state;
+            option.textContent = state;
+            stateSelect.appendChild(option);
+        });
+    </script>
+</body>
+</html> 
